@@ -16,10 +16,11 @@ func (h Handler[T]) GinHandler(engine *Engine) gin.HandlerFunc {
 		service(c)
 
 		// unexpected error
-		if !c.IsResponded || c.Response != nil {
+		if !c.IsResponded || c.Response == nil {
 			ctx.JSON(500, gin.H{
 				"message": "Service did not define response",
 			})
+			return
 		}
 
 		if c.Response.Success {
