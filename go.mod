@@ -7,11 +7,13 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/websocket v1.5.0
+	github.com/metadiv-io/base v1.0.4
 	github.com/metadiv-io/env v1.0.0
 	github.com/metadiv-io/ginmid v1.0.1
 	github.com/metadiv-io/logger v1.0.0
 	github.com/metadiv-io/sql v1.1.0
 	github.com/robfig/cron v1.2.0
+	gorm.io/gorm v1.25.0
 )
 
 require (
@@ -53,5 +55,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/driver/mysql v1.5.0 // indirect
 	gorm.io/driver/sqlite v1.5.0 // indirect
-	gorm.io/gorm v1.25.0 // indirect
 )

@@ -79,6 +79,8 @@ github.com/mattn/go-sqlite3 v1.14.15 h1:vfoHhTN1af61xCRSWzFIWzx2YskyMTwHLrExkBOj
 github.com/mattn/go-sqlite3 v1.14.15/go.mod h1:2eHXhiwb8IkHr+BDWZGa96P6+rkvnG63S2DGjv9HUNg=
 github.com/memcachier/mc/v3 v3.0.3 h1:qii+lDiPKi36O4Xg+HVKwHu6Oq+Gt17b+uEiA0Drwv4=
 github.com/memcachier/mc/v3 v3.0.3/go.mod h1:GzjocBahcXPxt2cmqzknrgqCOmMxiSzhVKPOe90Tpug=
+github.com/metadiv-io/base v1.0.4 h1:JcAS08KEHqWYeE4PZw98fV6A4dn9eO05qUE8ZXtb30g=
+github.com/metadiv-io/base v1.0.4/go.mod h1:b1YBYtK2P8w6Oto+kUsu/iUfLbgKvQ8YljC5jwK7E40=
 github.com/metadiv-io/env v1.0.0 h1:QotphOHnKnFBvrCcF/XNgpAoMoJAxKxkI4gLlG5Do80=
 github.com/metadiv-io/env v1.0.0/go.mod h1:1KtO1L/42/djY3SGZlIs0zL1tbx6YjI8bahSFk0dJRU=
 github.com/metadiv-io/ginmid v1.0.1 h1:VgAs/N3kWhLiKhHVxWLJwP9TAIebO11reZAigm9QHag=
