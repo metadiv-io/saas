@@ -51,5 +51,9 @@ func (h Handler[T]) GinHandler(engine *Engine) gin.HandlerFunc {
 }
 
 func (h Handler[T]) QueryApiCredit(ctx *gin.Context) float64 {
-	return UsageManager.GetByTag(ctx.Request.Method + ":" + ctx.FullPath()).Credit
+	api := UsageManager.GetByTag(ctx.Request.Method + ":" + ctx.FullPath())
+	if api == nil {
+		return 0
+	}
+	return api.Credit
 }
