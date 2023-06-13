@@ -9,9 +9,9 @@ import (
 // User apis are only accessible by users.
 // Admin users, workspace users and api keys are not allowed to access these apis.
 
-func UserOnly[T any](engine *micro.Engine) gin.HandlerFunc {
+func UserOnly(engine *micro.Engine) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		c := micro.NewContext[T](engine, ctx, 0)
+		c := micro.NewContext[struct{}](engine, ctx, 0)
 		j := c.AuthJwt()
 		if j == nil {
 			c.Err(constant.ERR_CODE_UNAUTHORIZED)
