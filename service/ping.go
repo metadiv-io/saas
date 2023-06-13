@@ -7,11 +7,13 @@ type Pong struct {
 	SystemName string `json:"system_name"`
 }
 
-func PingHandler() micro.Service[struct{}] {
-	return func(ctx *micro.Context[struct{}]) {
-		ctx.OK(&Pong{
-			ctx.Engine.SystemUUID,
-			ctx.Engine.SystemUUID,
-		})
+func PingHandler() micro.HandlerResponse[struct{}] {
+	return micro.HandlerResponse[struct{}]{
+		Service: func(ctx *micro.Context[struct{}]) {
+			ctx.OK(&Pong{
+				ctx.Engine.SystemUUID,
+				ctx.Engine.SystemUUID,
+			})
+		},
 	}
 }

@@ -7,13 +7,17 @@ import (
 
 type Service[T any] func(ctx *Context[T])
 
-type Handler[T any] func() Service[T]
+type Handler[T any] func() HandlerResponse[T]
+
+type HandlerResponse[T any] struct {
+	Service Service[T]
+}
 
 func (h Handler[T]) GinHandler(engine *Engine) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		service := h()
+		handler := h()
 		c := NewContext[T](engine, ctx, h.QueryApiCredit(ctx))
-		service(c)
+		handler.Service(c)
 
 		// unexpected error
 		if !c.IsResponded || c.Response == nil {
