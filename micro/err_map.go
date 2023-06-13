@@ -16,6 +16,9 @@ func (m *errMap) Register(code string, locale string, message string) {
 }
 
 func (m *errMap) Get(code string, locale string) string {
+	if locale == "" {
+		locale = constant.LOCALE_EN
+	}
 	if _, ok := (*m)[locale]; !ok {
 		return ""
 	}
