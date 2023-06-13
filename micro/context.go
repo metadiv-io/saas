@@ -17,16 +17,15 @@ import (
 )
 
 type Context[T any] struct {
-	Engine       *Engine
-	GinCtx       *gin.Context
-	Page         *sql.Pagination
-	Sort         *sql.Sort
-	Request      *T
-	Response     *types.Response
-	StartTime    time.Time
-	Credit       float64
-	ResponsePage *sql.Pagination
-	IsResponded  bool
+	Engine      *Engine
+	GinCtx      *gin.Context
+	Page        *sql.Pagination
+	Sort        *sql.Sort
+	Request     *T
+	Response    *types.Response
+	StartTime   time.Time
+	Credit      float64
+	IsResponded bool
 }
 
 func NewContext[T any](engine *Engine, ginCtx *gin.Context, credit float64) *Context[T] {
@@ -37,16 +36,15 @@ func NewContext[T any](engine *Engine, ginCtx *gin.Context, credit float64) *Con
 		sort = utils.GinRequest[sql.Sort](ginCtx)
 	}
 	ctx := &Context[T]{
-		Engine:       engine,
-		GinCtx:       ginCtx,
-		Page:         page,
-		Sort:         sort,
-		Request:      utils.GinRequest[T](ginCtx),
-		Response:     nil,
-		StartTime:    time.Now(),
-		Credit:       credit,
-		ResponsePage: nil,
-		IsResponded:  false,
+		Engine:      engine,
+		GinCtx:      ginCtx,
+		Page:        page,
+		Sort:        sort,
+		Request:     utils.GinRequest[T](ginCtx),
+		Response:    nil,
+		StartTime:   time.Now(),
+		Credit:      credit,
+		IsResponded: false,
 	}
 	ctx.TraceID() // generate trace id if not exist
 	return ctx
@@ -133,7 +131,7 @@ func (ctx *Context[T]) LogPrefix() string {
 	return fmt.Sprintf("[system: %s] [trace: %s] [api: %s] [ip: %s] [agent: %s]", ctx.Engine.SystemUUID, ctx.TraceID(), ctx.ApiTag(), ctx.ClientIP(), ctx.UserAgent())
 }
 
-func (ctx *Context[T]) OK(data any) {
+func (ctx *Context[T]) OK(data any, page ...*sql.Pagination) {
 	if ctx.IsResponded {
 		log.Println("Warning: context already responded")
 		return
@@ -148,13 +146,17 @@ func (ctx *Context[T]) OK(data any) {
 		Duration:   time.Since(ctx.StartTime).Milliseconds(),
 		Credit:     ctx.Credit,
 	})
+	var pageResponse *sql.Pagination
+	if len(page) > 0 {
+		pageResponse = page[0]
+	}
 	ctx.Response = &types.Response{
 		Success:    true,
 		TraceID:    ctx.TraceID(),
 		Locale:     ctx.Locale(),
 		Duration:   time.Since(ctx.StartTime).Milliseconds(),
 		Credit:     ctx.Credit,
-		Pagination: ctx.ResponsePage,
+		Pagination: pageResponse,
 		Data:       data,
 		Traces:     traces,
 	}
