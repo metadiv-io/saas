@@ -19,17 +19,17 @@ type Jwt struct {
 	Workspaces []string `json:"workspaces"` // admin has no workspace; workspace_user/api_key has only one workspace; user has many workspaces
 }
 
-func (j *Jwt) IssueAdminToken(privPEM, userUUID, username, ip, userAgent string) (string, error) {
+func (j *Jwt) IssueAdminToken(d time.Duration, privPEM, userUUID, username, ip, userAgent string) (string, error) {
 	j.UUID = uuid.NewString()
 	j.UserUUID = userUUID
 	j.Username = username
 	j.Type = constant.JWT_TYPE_ADMIN
 	j.UserAgent = userAgent
 	j.IPs = []string{ip}
-	return j.issueToken(privPEM)
+	return j.issueToken(d, privPEM)
 }
 
-func (j *Jwt) IssueUserToken(privPEM, userUUID, username, ip, userAgent string, workspaces []string) (string, error) {
+func (j *Jwt) IssueUserToken(d time.Duration, privPEM, userUUID, username, ip, userAgent string, workspaces []string) (string, error) {
 	j.UUID = uuid.NewString()
 	j.UserUUID = userUUID
 	j.Username = username
@@ -37,10 +37,10 @@ func (j *Jwt) IssueUserToken(privPEM, userUUID, username, ip, userAgent string, 
 	j.UserAgent = userAgent
 	j.IPs = []string{ip}
 	j.Workspaces = workspaces
-	return j.issueToken(privPEM)
+	return j.issueToken(d, privPEM)
 }
 
-func (j *Jwt) IssueWorkspaceUserToken(privPEM, userUUID, username, ip, userAgent, workspaceUUID string) (string, error) {
+func (j *Jwt) IssueWorkspaceUserToken(d time.Duration, privPEM, userUUID, username, ip, userAgent, workspaceUUID string) (string, error) {
 	j.UUID = uuid.NewString()
 	j.UserUUID = userUUID
 	j.Username = username
@@ -48,17 +48,17 @@ func (j *Jwt) IssueWorkspaceUserToken(privPEM, userUUID, username, ip, userAgent
 	j.UserAgent = userAgent
 	j.IPs = []string{ip}
 	j.Workspaces = []string{workspaceUUID}
-	return j.issueToken(privPEM)
+	return j.issueToken(d, privPEM)
 }
 
-func (j *Jwt) IssueAPIKeyToken(privPEM, userUUID, username string, ips []string, workspaceUUID string) (string, error) {
+func (j *Jwt) IssueAPIKeyToken(d time.Duration, privPEM, userUUID, username string, ips []string, workspaceUUID string) (string, error) {
 	j.UUID = uuid.NewString()
 	j.UserUUID = userUUID
 	j.Username = username
 	j.Type = constant.JWT_TYPE_API_KEY
 	j.IPs = ips
 	j.Workspaces = []string{workspaceUUID}
-	return j.issueToken(privPEM)
+	return j.issueToken(d, privPEM)
 }
 
 func (j *Jwt) ParseToken(pubPEM, token string) error {
@@ -136,7 +136,7 @@ func (j *Jwt) IsWorkspaceAllowed(workspaceUUID string) bool {
 	return false
 }
 
-func (j *Jwt) issueToken(privPEM string) (string, error) {
+func (j *Jwt) issueToken(d time.Duration, privPEM string) (string, error) {
 	key, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(privPEM))
 	if err != nil {
 		return "", fmt.Errorf("jwt error - parsing private pem: %w", err)
@@ -150,7 +150,7 @@ func (j *Jwt) issueToken(privPEM string) (string, error) {
 	claims["ips"] = j.IPs
 	claims["workspaces"] = j.Workspaces
 	claims["iat"] = now.Unix()
-	claims["exp"] = now.Add(time.Hour * 24).Unix()
+	claims["exp"] = now.Add(d).Unix()
 
 	token, err := jwt.NewWithClaims(jwt.SigningMethodRS256, claims).SignedString(key)
 	if err != nil {
