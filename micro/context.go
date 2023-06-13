@@ -29,11 +29,17 @@ type Context[T any] struct {
 }
 
 func NewContext[T any](engine *Engine, ginCtx *gin.Context, credit float64) *Context[T] {
+	var page *sql.Pagination
+	var sort *sql.Sort
+	if ginCtx.Request.Method == "GET" {
+		page = utils.GinRequest[sql.Pagination](ginCtx)
+		sort = utils.GinRequest[sql.Sort](ginCtx)
+	}
 	ctx := &Context[T]{
 		Engine:       engine,
 		GinCtx:       ginCtx,
-		Page:         utils.GinRequest[sql.Pagination](ginCtx),
-		Sort:         utils.GinRequest[sql.Sort](ginCtx),
+		Page:         page,
+		Sort:         sort,
 		Request:      utils.GinRequest[T](ginCtx),
 		Response:     nil,
 		StartTime:    time.Now(),
