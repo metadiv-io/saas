@@ -114,6 +114,9 @@ func (ctx *Context[T]) AuthToken() string {
 func (ctx *Context[T]) AuthJwt() *types.Jwt {
 	j := &types.Jwt{}
 	j.ParseToken(ctx.Engine.PubPEM, ctx.AuthToken())
+	if j.UUID == "" {
+		return nil
+	}
 	return j
 }
 
