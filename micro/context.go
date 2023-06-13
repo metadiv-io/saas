@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/metadiv-io/logger"
 	"github.com/metadiv-io/saas/constant"
 	"github.com/metadiv-io/saas/types"
 	"github.com/metadiv-io/saas/utils"
@@ -113,7 +114,11 @@ func (ctx *Context[T]) AuthToken() string {
 
 func (ctx *Context[T]) AuthJwt() *types.Jwt {
 	j := &types.Jwt{}
-	j.ParseToken(ctx.Engine.PubPEM, ctx.AuthToken())
+	err := j.ParseToken(ctx.Engine.PubPEM, ctx.AuthToken())
+	if err != nil {
+		logger.Prefix(ctx.LogPrefix()).Error(err)
+		return nil
+	}
 	if j.UUID == "" {
 		return nil
 	}

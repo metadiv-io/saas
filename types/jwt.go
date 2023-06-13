@@ -148,6 +148,7 @@ func (j *Jwt) issueToken(d time.Duration, privPEM string) (string, error) {
 	claims["username"] = j.Username
 	claims["type"] = j.Type
 	claims["ips"] = j.IPs
+	claims["user_agent"] = j.UserAgent
 	claims["workspaces"] = j.Workspaces
 	claims["iat"] = now.Unix()
 	claims["exp"] = now.Add(d).Unix()
