@@ -79,12 +79,18 @@ func (j *Jwt) ParseToken(pubPEM, token string) error {
 	j.Type, _ = claims["type"].(string)
 	j.UserAgent, _ = claims["user_agent"].(string)
 	j.IPs = make([]string, 0)
-	for _, v := range claims["ips"].([]interface{}) {
-		j.IPs = append(j.IPs, v.(string))
+	ips, ok := claims["ips"].([]interface{})
+	if ok {
+		for _, v := range ips {
+			j.IPs = append(j.IPs, v.(string))
+		}
 	}
-	j.Workspaces = make([]string, 0)
-	for _, v := range claims["workspaces"].([]interface{}) {
-		j.Workspaces = append(j.Workspaces, v.(string))
+	workspaces, ok := claims["workspaces"].([]interface{})
+	if ok {
+		j.Workspaces = make([]string, 0)
+		for _, v := range workspaces {
+			j.Workspaces = append(j.Workspaces, v.(string))
+		}
 	}
 	return nil
 }
