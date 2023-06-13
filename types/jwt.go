@@ -73,11 +73,11 @@ func (j *Jwt) ParseToken(pubPEM, token string) error {
 	if err != nil {
 		return fmt.Errorf("jwt error - parsing token: %w", err)
 	}
-	j.UUID = claims["uuid"].(string)
-	j.UserUUID = claims["user_uuid"].(string)
-	j.Username = claims["username"].(string)
-	j.Type = claims["type"].(string)
-	j.UserAgent = claims["user_agent"].(string)
+	j.UUID, _ = claims["uuid"].(string)
+	j.UserUUID, _ = claims["user_uuid"].(string)
+	j.Username, _ = claims["username"].(string)
+	j.Type, _ = claims["type"].(string)
+	j.UserAgent, _ = claims["user_agent"].(string)
 	j.IPs = make([]string, 0)
 	for _, v := range claims["ips"].([]interface{}) {
 		j.IPs = append(j.IPs, v.(string))
