@@ -15,13 +15,13 @@ func UserOnly[T any](engine *micro.Engine) gin.HandlerFunc {
 		j := c.AuthJwt()
 		if j == nil {
 			c.Err(constant.ERR_CODE_UNAUTHORIZED)
-			ctx.JSON(401, c.Response)
+			ctx.AbortWithStatusJSON(401, c.Response)
 			return
 		}
 
 		if !j.IsUser() || !j.IsIPAllowed(c.ClientIP()) || !j.IsUserAgentAllowed(c.UserAgent()) {
 			c.Err(constant.ERR_CODE_UNAUTHORIZED)
-			ctx.JSON(401, c.Response)
+			ctx.AbortWithStatusJSON(401, c.Response)
 			return
 		}
 
