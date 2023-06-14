@@ -124,7 +124,7 @@ func (ctx *Context[T]) AuthJwt() *types.Jwt {
 }
 
 func (ctx *Context[T]) ApiTag() string {
-	return ctx.GinCtx.Request.Method + " " + ctx.GinCtx.FullPath()
+	return ctx.GinCtx.Request.Method + ":" + ctx.GinCtx.FullPath()
 }
 
 func (ctx *Context[T]) LogPrefix() string {
