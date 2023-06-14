@@ -134,12 +134,15 @@ func getWorkspaceUUID(ctx *gin.Context) string {
 
 func getLocale(ctx *gin.Context) string {
 	if ctx == nil {
-		return ""
+		return constant.LOCALE_EN
 	}
 	return ctx.GetHeader(constant.MICRO_HEADER_LOCALE)
 }
 
 func getAuthToken(ctx *gin.Context) string {
+	if ctx == nil {
+		return ""
+	}
 	token := ctx.GetHeader("Authorization")
 	token = strings.ReplaceAll(token, "Bearer ", "")
 	token = strings.ReplaceAll(token, "bearer ", "")
