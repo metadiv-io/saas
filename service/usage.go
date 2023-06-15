@@ -5,15 +5,11 @@ import (
 	"github.com/metadiv-io/saas/call"
 	"github.com/metadiv-io/saas/constant"
 	"github.com/metadiv-io/saas/micro"
+	"github.com/metadiv-io/saas/types"
 )
 
-type Consumption struct {
-	WorkspaceUUID string  `json:"workspace_uuid"`
-	Credit        float64 `json:"credit"`
-}
-
 type SendConsumptionRequest struct {
-	Consumption []Consumption `json:"consumption"`
+	Consumption []types.Consumption `json:"consumption"`
 }
 
 func SendConsumptionCron() {
@@ -21,11 +17,12 @@ func SendConsumptionCron() {
 		return
 	}
 
-	var consumptions = make([]Consumption, 0)
-	for workspaceUUID, credit := range micro.UsageManager.WorkspaceToConsumption {
-		consumptions = append(consumptions, Consumption{
+	var consumptions = make([]types.Consumption, 0)
+	for workspaceUUID, consumption := range micro.UsageManager.WorkspaceToConsumption {
+		consumptions = append(consumptions, types.Consumption{
 			WorkspaceUUID: workspaceUUID,
-			Credit:        credit,
+			UserUUID:      consumption.UserUUID,
+			Credit:        consumption.Credit,
 		})
 	}
 
@@ -42,5 +39,5 @@ func SendConsumptionCron() {
 	}
 
 	logger.Info("sent consumption records: ", len(micro.UsageManager.WorkspaceToConsumption))
-	micro.UsageManager.WorkspaceToConsumption = make(map[string]float64)
+	micro.UsageManager.WorkspaceToConsumption = make(map[string]*types.Consumption)
 }
