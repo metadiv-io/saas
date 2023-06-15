@@ -28,9 +28,11 @@ func RegisterCron(engine *micro.Engine) func() {
 		}, nil)
 		if err != nil {
 			logger.Error("Fail to register service:", err)
+			return
 		}
 		if !resp.Success {
 			logger.Error("Fail to register service:", resp.Error.Message)
+			return
 		}
 		engine.PubPEM = resp.Data.PublicPEM
 		micro.UsageManager.UUIDToApi = resp.Data.UsageApi
