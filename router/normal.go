@@ -16,6 +16,11 @@ func GET[T any](engine *micro.Engine, route string, handler micro.Handler[T], mi
 	engine.Gin.GET(route, append(middleware, handler.GinHandler(engine))...)
 }
 
+func CachedGET[T any](engine *micro.Engine, route string, duration time.Duration, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
+	middleware = utils.JoinHandlerAtStart(ginmid.RateLimited(time.Minute, 60), middleware...)
+	engine.Gin.GET(route, append(middleware, ginmid.Cache(duration, handler.GinHandler(engine)))...)
+}
+
 func POST[T any](engine *micro.Engine, route string, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
 	middleware = utils.JoinHandlerAtStart(ginmid.RateLimited(time.Minute, 60), middleware...)
 	engine.Gin.POST(route, append(middleware, handler.GinHandler(engine))...)

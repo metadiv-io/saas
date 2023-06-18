@@ -19,6 +19,13 @@ func WorkspaceGET[T any](engine *micro.Engine, route, uuid string, handler micro
 	engine.Gin.GET(route, append(middleware, handler.GinHandler(engine))...)
 }
 
+func WorkspaceCachedGET[T any](engine *micro.Engine, route, uuid string, duration time.Duration, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
+	micro.UsageManager.Register("GET", route, uuid)
+	middleware = utils.JoinHandlerAtStart(mid.WorkspaceUserOnly(engine), middleware...)
+	middleware = utils.JoinHandlerAtStart(ginmid.RateLimited(time.Hour, 60*60*10), middleware...)
+	engine.Gin.GET(route, append(middleware, ginmid.Cache(duration, handler.GinHandler(engine)))...)
+}
+
 func WorkspacePOST[T any](engine *micro.Engine, route, uuid string, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
 	micro.UsageManager.Register("POST", route, uuid)
 	middleware = utils.JoinHandlerAtStart(mid.WorkspaceUserOnly(engine), middleware...)

@@ -18,6 +18,12 @@ func UserGET[T any](engine *micro.Engine, route string, handler micro.Handler[T]
 	engine.Gin.GET(route, append(middleware, handler.GinHandler(engine))...)
 }
 
+func UserCachedGET[T any](engine *micro.Engine, route string, duration time.Duration, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
+	middleware = utils.JoinHandlerAtStart(mid.UserOnly(engine), middleware...)
+	middleware = utils.JoinHandlerAtStart(ginmid.RateLimited(time.Hour, 60*60*2), middleware...)
+	engine.Gin.GET(route, append(middleware, ginmid.Cache(duration, handler.GinHandler(engine)))...)
+}
+
 func UserPOST[T any](engine *micro.Engine, route string, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
 	middleware = utils.JoinHandlerAtStart(mid.UserOnly(engine), middleware...)
 	middleware = utils.JoinHandlerAtStart(ginmid.RateLimited(time.Hour, 60*60*2), middleware...)

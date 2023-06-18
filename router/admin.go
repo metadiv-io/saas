@@ -1,7 +1,10 @@
 package router
 
 import (
+	"time"
+
 	"github.com/gin-gonic/gin"
+	"github.com/metadiv-io/ginmid"
 	"github.com/metadiv-io/saas/micro"
 	mid "github.com/metadiv-io/saas/middleware"
 	"github.com/metadiv-io/saas/utils"
@@ -12,6 +15,11 @@ import (
 func AdminGET[T any](engine *micro.Engine, route string, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
 	middleware = utils.JoinHandlerAtStart(mid.AdminOnly(engine), middleware...)
 	engine.Gin.GET(route, append(middleware, handler.GinHandler(engine))...)
+}
+
+func AdminCachedGET[T any](engine *micro.Engine, route string, duration time.Duration, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
+	middleware = utils.JoinHandlerAtStart(mid.AdminOnly(engine), middleware...)
+	engine.Gin.GET(route, append(middleware, ginmid.Cache(duration, handler.GinHandler(engine)))...)
 }
 
 func AdminPOST[T any](engine *micro.Engine, route string, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
