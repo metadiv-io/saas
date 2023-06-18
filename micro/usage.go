@@ -56,10 +56,11 @@ type IsAllowResponse struct {
 	Allowed          bool    `json:"allowed"`
 }
 
-func (m *usageManager) AskWorkspaceAllowed(userUUID string, apiUUID string) bool {
+func (m *usageManager) AskWorkspaceAllowed(workspaceUUID, userUUID string, apiUUID string) bool {
 	resp, err := call.POST[IsAllowResponse](nil, constant.MICRO_SERVICE_HOST_AUTH, "/micro/allowed", IsAllowRequest{
-		UserUUID: userUUID,
-		ApiUUID:  apiUUID,
+		WorkspaceUUID: workspaceUUID,
+		UserUUID:      userUUID,
+		ApiUUID:       apiUUID,
 	}, nil)
 	if err != nil {
 		logger.Error("asking workspace allowed: ", err)

@@ -42,7 +42,7 @@ func WorkspaceUserOnly(engine *micro.Engine) gin.HandlerFunc {
 			return
 		}
 
-		if !micro.UsageManager.AskWorkspaceAllowed(c.Workspace(), micro.UsageManager.TagToApi[c.ApiTag()].UUID) {
+		if !micro.UsageManager.AskWorkspaceAllowed(c.Workspace(), j.UserUUID, micro.UsageManager.TagToApi[c.ApiTag()].UUID) {
 			c.Err(constant.ERR_CODE_NOT_ENOUGH_CREDIT)
 			ctx.AbortWithStatusJSON(403, c.Response)
 			return
