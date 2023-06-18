@@ -8,5 +8,6 @@ import (
 func QuickSetup(engine *micro.Engine) {
 	router.GET(engine, "/ping", PingHandler)
 	engine.CRON("@every 10s", RegisterCron(engine))
+	engine.CRON("@every 15s", GetMicroIpCron(engine))
 	engine.CRON("@every 1m", SendConsumptionCron)
 }

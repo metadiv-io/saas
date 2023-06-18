@@ -11,6 +11,11 @@ import (
 
 func UserOnly(engine *micro.Engine) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		if isMicro(ctx, engine) {
+			ctx.Next()
+			return
+		}
+
 		c := micro.NewContext[struct{}](engine, ctx, 0)
 		j := c.AuthJwt()
 		if j == nil {

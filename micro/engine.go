@@ -10,7 +10,8 @@ type Engine struct {
 	Cron       *cron.Cron
 	SystemUUID string
 	SystemName string
-	PubPEM     string // Public key for JWT
+	PubPEM     string   // Public key for JWT
+	MicroIPs   []string // IP addresses of micro services
 }
 
 func NewEngine(systemUUID, systemName string) *Engine {
