@@ -71,7 +71,7 @@ func (m *usageManager) AskWorkspaceAllowed(userUUID string, apiUUID string) bool
 		return false
 	}
 
-	if resp.Data.Allowed {
+	if resp.Data.Allowed && resp.Data.Credit > 0 {
 		_, ok := m.WorkspaceToConsumption[resp.Data.SubscriptionUUID]
 		if !ok {
 			m.WorkspaceToConsumption[userUUID] = &types.Consumption{
