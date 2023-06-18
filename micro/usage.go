@@ -49,6 +49,8 @@ type IsAllowRequest struct {
 }
 
 type IsAllowResponse struct {
+	WorkspaceUUID    string  `json:"workspace_uuid"`
+	UserUUID         string  `json:"user_uuid"`
 	SubscriptionUUID string  `json:"subscription_uuid"`
 	Credit           float64 `json:"credit"`
 	Allowed          bool    `json:"allowed"`
@@ -74,7 +76,8 @@ func (m *usageManager) AskWorkspaceAllowed(userUUID string, apiUUID string) bool
 		if !ok {
 			m.WorkspaceToConsumption[userUUID] = &types.Consumption{
 				SubscriptionUUID: resp.Data.SubscriptionUUID,
-				UserUUID:         userUUID,
+				UserUUID:         resp.Data.UserUUID,
+				WorkspaceUUID:    resp.Data.WorkspaceUUID,
 				Credit:           resp.Data.Credit,
 			}
 		} else {

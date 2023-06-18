@@ -21,6 +21,7 @@ func SendConsumptionCron() {
 	for _, consumption := range micro.UsageManager.WorkspaceToConsumption {
 		consumptions = append(consumptions, types.Consumption{
 			SubscriptionUUID: consumption.SubscriptionUUID,
+			WorkspaceUUID:    consumption.WorkspaceUUID,
 			UserUUID:         consumption.UserUUID,
 			Credit:           consumption.Credit,
 		})
