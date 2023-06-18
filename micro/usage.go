@@ -72,17 +72,19 @@ func (m *usageManager) AskWorkspaceAllowed(workspaceUUID, userUUID string, apiUU
 		return false
 	}
 
-	if resp.Data.Allowed && resp.Data.Credit > 0 {
-		_, ok := m.WorkspaceToConsumption[resp.Data.SubscriptionUUID]
-		if !ok {
-			m.WorkspaceToConsumption[userUUID] = &types.Consumption{
-				SubscriptionUUID: resp.Data.SubscriptionUUID,
-				UserUUID:         resp.Data.UserUUID,
-				WorkspaceUUID:    resp.Data.WorkspaceUUID,
-				Credit:           resp.Data.Credit,
+	if resp.Data.Allowed {
+		if resp.Data.Credit > 0 {
+			_, ok := m.WorkspaceToConsumption[resp.Data.SubscriptionUUID]
+			if !ok {
+				m.WorkspaceToConsumption[userUUID] = &types.Consumption{
+					SubscriptionUUID: resp.Data.SubscriptionUUID,
+					UserUUID:         resp.Data.UserUUID,
+					WorkspaceUUID:    resp.Data.WorkspaceUUID,
+					Credit:           resp.Data.Credit,
+				}
+			} else {
+				m.WorkspaceToConsumption[userUUID].Credit += resp.Data.Credit
 			}
-		} else {
-			m.WorkspaceToConsumption[userUUID].Credit += resp.Data.Credit
 		}
 		return true
 	}
