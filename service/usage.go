@@ -18,11 +18,11 @@ func SendConsumptionCron() {
 	}
 
 	var consumptions = make([]types.Consumption, 0)
-	for workspaceUUID, consumption := range micro.UsageManager.WorkspaceToConsumption {
+	for _, consumption := range micro.UsageManager.WorkspaceToConsumption {
 		consumptions = append(consumptions, types.Consumption{
-			WorkspaceUUID: workspaceUUID,
-			UserUUID:      consumption.UserUUID,
-			Credit:        consumption.Credit,
+			SubscriptionUUID: consumption.SubscriptionUUID,
+			UserUUID:         consumption.UserUUID,
+			Credit:           consumption.Credit,
 		})
 	}
 

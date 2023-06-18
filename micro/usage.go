@@ -14,7 +14,7 @@ var UsageManager = &usageManager{
 }
 
 type usageManager struct {
-	WorkspaceToConsumption map[string]*types.Consumption // user_uuid -> consumption
+	WorkspaceToConsumption map[string]*types.Consumption // subscription_uuid -> consumption
 	UUIDToApi              map[string]*types.Api
 	TagToApi               map[string]*types.Api
 }
@@ -49,8 +49,9 @@ type IsAllowRequest struct {
 }
 
 type IsAllowResponse struct {
-	Credit  float64 `json:"credit"`
-	Allowed bool    `json:"allowed"`
+	SubscriptionUUID string  `json:"subscription_uuid"`
+	Credit           float64 `json:"credit"`
+	Allowed          bool    `json:"allowed"`
 }
 
 func (m *usageManager) AskWorkspaceAllowed(userUUID string, apiUUID string) bool {
@@ -69,12 +70,12 @@ func (m *usageManager) AskWorkspaceAllowed(userUUID string, apiUUID string) bool
 	}
 
 	if resp.Data.Allowed {
-		_, ok := m.WorkspaceToConsumption[userUUID]
+		_, ok := m.WorkspaceToConsumption[resp.Data.SubscriptionUUID]
 		if !ok {
 			m.WorkspaceToConsumption[userUUID] = &types.Consumption{
-				WorkspaceUUID: userUUID,
-				UserUUID:      userUUID,
-				Credit:        resp.Data.Credit,
+				SubscriptionUUID: resp.Data.SubscriptionUUID,
+				UserUUID:         userUUID,
+				Credit:           resp.Data.Credit,
 			}
 		} else {
 			m.WorkspaceToConsumption[userUUID].Credit += resp.Data.Credit
