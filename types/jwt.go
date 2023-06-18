@@ -6,6 +6,7 @@ import (
 
 	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
+	"github.com/metadiv-io/env"
 	"github.com/metadiv-io/saas/constant"
 )
 
@@ -112,6 +113,9 @@ func (j *Jwt) IsAPIKey() bool {
 }
 
 func (j *Jwt) IsIPAllowed(ip string) bool {
+	if env.Bool("GIN_SKIP_IP_CHECK", false) && env.String("GIN_MODE") != "release" { // only for local development
+		return true
+	}
 	if j.IPs == nil {
 		return false
 	}
