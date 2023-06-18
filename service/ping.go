@@ -11,8 +11,8 @@ func PingHandler() micro.HandlerResponse[struct{}] {
 	return micro.HandlerResponse[struct{}]{
 		Service: func(ctx *micro.Context[struct{}]) {
 			ctx.OK(&Pong{
-				ctx.Engine.SystemUUID,
-				ctx.Engine.SystemUUID,
+				SystemUUID: ctx.Engine.SystemUUID,
+				SystemName: ctx.Engine.SystemName,
 			})
 		},
 	}

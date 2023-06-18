@@ -2,6 +2,7 @@ package micro
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/metadiv-io/env"
 	"github.com/robfig/cron"
 )
 
@@ -14,12 +15,21 @@ type Engine struct {
 	MicroIPs   []string // IP addresses of micro services
 }
 
-func NewEngine(systemUUID, systemName string) *Engine {
+func NewEngine() *Engine {
+	SYSTEM_UUID := env.String("SYSTEM_UUID")
+	if SYSTEM_UUID == "" {
+		panic("SYSTEM_UUID is empty")
+	}
+
+	SYSTEM_NAME := env.String("SYSTEM_NAME")
+	if SYSTEM_NAME == "" {
+		panic("SYSTEM_NAME is empty")
+	}
 	return &Engine{
 		Gin:        gin.New(),
 		Cron:       cron.New(),
-		SystemUUID: systemUUID,
-		SystemName: systemName,
+		SystemUUID: SYSTEM_UUID,
+		SystemName: SYSTEM_NAME,
 	}
 }
 
