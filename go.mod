@@ -7,6 +7,7 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/websocket v1.5.0
+	github.com/matoous/go-nanoid/v2 v2.0.0
 	github.com/metadiv-io/base v1.0.4
 	github.com/metadiv-io/env v1.0.0
 	github.com/metadiv-io/ginmid v1.0.1
