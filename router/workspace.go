@@ -33,11 +33,25 @@ func WorkspacePOST[T any](engine *micro.Engine, route, uuid string, handler micr
 	engine.Gin.POST(route, append(middleware, handler.GinHandler(engine))...)
 }
 
+func WorkspaceCachedPOST[T any](engine *micro.Engine, route, uuid string, duration time.Duration, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
+	micro.UsageManager.Register("POST", route, uuid)
+	middleware = utils.JoinHandlerAtStart(mid.WorkspaceUserOnly(engine), middleware...)
+	middleware = utils.JoinHandlerAtStart(ginmid.RateLimited(time.Hour, 60*60*10), middleware...)
+	engine.Gin.POST(route, append(middleware, ginmid.Cache(duration, handler.GinHandler(engine)))...)
+}
+
 func WorkspacePUT[T any](engine *micro.Engine, route, uuid string, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
 	micro.UsageManager.Register("PUT", route, uuid)
 	middleware = utils.JoinHandlerAtStart(mid.WorkspaceUserOnly(engine), middleware...)
 	middleware = utils.JoinHandlerAtStart(ginmid.RateLimited(time.Hour, 60*60*10), middleware...)
 	engine.Gin.PUT(route, append(middleware, handler.GinHandler(engine))...)
+}
+
+func WorkspaceCachedPUT[T any](engine *micro.Engine, route, uuid string, duration time.Duration, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
+	micro.UsageManager.Register("PUT", route, uuid)
+	middleware = utils.JoinHandlerAtStart(mid.WorkspaceUserOnly(engine), middleware...)
+	middleware = utils.JoinHandlerAtStart(ginmid.RateLimited(time.Hour, 60*60*10), middleware...)
+	engine.Gin.PUT(route, append(middleware, ginmid.Cache(duration, handler.GinHandler(engine)))...)
 }
 
 func WorkspacePATCH[T any](engine *micro.Engine, route, uuid string, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
@@ -52,6 +66,13 @@ func WorkspaceDELETE[T any](engine *micro.Engine, route, uuid string, handler mi
 	middleware = utils.JoinHandlerAtStart(mid.WorkspaceUserOnly(engine), middleware...)
 	middleware = utils.JoinHandlerAtStart(ginmid.RateLimited(time.Hour, 60*60*10), middleware...)
 	engine.Gin.DELETE(route, append(middleware, handler.GinHandler(engine))...)
+}
+
+func WorkspaceCachedDELETE[T any](engine *micro.Engine, route, uuid string, duration time.Duration, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
+	micro.UsageManager.Register("DELETE", route, uuid)
+	middleware = utils.JoinHandlerAtStart(mid.WorkspaceUserOnly(engine), middleware...)
+	middleware = utils.JoinHandlerAtStart(ginmid.RateLimited(time.Hour, 60*60*10), middleware...)
+	engine.Gin.DELETE(route, append(middleware, ginmid.Cache(duration, handler.GinHandler(engine)))...)
 }
 
 func WorkspaceOPTIONS[T any](engine *micro.Engine, route, uuid string, handler micro.Handler[T], middleware ...gin.HandlerFunc) {

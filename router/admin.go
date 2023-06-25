@@ -27,9 +27,19 @@ func AdminPOST[T any](engine *micro.Engine, route string, handler micro.Handler[
 	engine.Gin.POST(route, append(middleware, handler.GinHandler(engine))...)
 }
 
+func AdminCachedPOST[T any](engine *micro.Engine, route string, duration time.Duration, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
+	middleware = utils.JoinHandlerAtStart(mid.AdminOnly(engine), middleware...)
+	engine.Gin.POST(route, append(middleware, ginmid.Cache(duration, handler.GinHandler(engine)))...)
+}
+
 func AdminPUT[T any](engine *micro.Engine, route string, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
 	middleware = utils.JoinHandlerAtStart(mid.AdminOnly(engine), middleware...)
 	engine.Gin.PUT(route, append(middleware, handler.GinHandler(engine))...)
+}
+
+func AdminCachedPUT[T any](engine *micro.Engine, route string, duration time.Duration, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
+	middleware = utils.JoinHandlerAtStart(mid.AdminOnly(engine), middleware...)
+	engine.Gin.PUT(route, append(middleware, ginmid.Cache(duration, handler.GinHandler(engine)))...)
 }
 
 func AdminPATCH[T any](engine *micro.Engine, route string, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
@@ -40,6 +50,11 @@ func AdminPATCH[T any](engine *micro.Engine, route string, handler micro.Handler
 func AdminDELETE[T any](engine *micro.Engine, route string, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
 	middleware = utils.JoinHandlerAtStart(mid.AdminOnly(engine), middleware...)
 	engine.Gin.DELETE(route, append(middleware, handler.GinHandler(engine))...)
+}
+
+func AdminCachedDELETE[T any](engine *micro.Engine, route string, duration time.Duration, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
+	middleware = utils.JoinHandlerAtStart(mid.AdminOnly(engine), middleware...)
+	engine.Gin.DELETE(route, append(middleware, ginmid.Cache(duration, handler.GinHandler(engine)))...)
 }
 
 func AdminOPTIONS[T any](engine *micro.Engine, route string, handler micro.Handler[T], middleware ...gin.HandlerFunc) {
