@@ -117,8 +117,10 @@ func (j *Jwt) IsIPAllowed(ip string) bool {
 		return true
 	}
 	if j.IPs == nil {
+		fmt.Println("IPs is nil")
 		return false
 	}
+	fmt.Println(ip, j.IPs)
 	for _, v := range j.IPs {
 		if v == "*" || v == ip {
 			return true
@@ -131,6 +133,7 @@ func (j *Jwt) IsUserAgentAllowed(userAgent string) bool {
 	if j.UserAgent == "*" {
 		return true
 	}
+	fmt.Println(userAgent, j.UserAgent)
 	return j.UserAgent == userAgent
 }
 
