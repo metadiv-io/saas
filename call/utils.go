@@ -3,6 +3,8 @@ package call
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
+	"io"
 	"net/http"
 	"strings"
 
@@ -40,10 +42,17 @@ func get[T any](ctx *gin.Context, host string, path string,
 	if err != nil {
 		return nil, err
 	}
+	defer resp.Body.Close()
+
+	bodyBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
 
 	var response Response[T]
-	err = json.NewDecoder(resp.Body).Decode(&response)
+	err = json.Unmarshal(bodyBytes, &response)
 	if err != nil {
+		fmt.Println("failed to unmarshal response body: ", string(bodyBytes))
 		return nil, err
 	}
 
@@ -82,10 +91,17 @@ func nonGet[T any](ctx *gin.Context, host, path, method string,
 	if err != nil {
 		return nil, err
 	}
+	defer resp.Body.Close()
+
+	bodyBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
 
 	var response Response[T]
-	err = json.NewDecoder(resp.Body).Decode(&response)
+	err = json.Unmarshal(bodyBytes, &response)
 	if err != nil {
+		fmt.Println("failed to unmarshal response body: ", string(bodyBytes))
 		return nil, err
 	}
 
