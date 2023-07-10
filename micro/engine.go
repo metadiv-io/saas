@@ -3,6 +3,7 @@ package micro
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/metadiv-io/env"
+	"github.com/metadiv-io/saas/constant"
 	"github.com/robfig/cron"
 )
 
@@ -17,14 +18,11 @@ type Engine struct {
 
 func NewEngine() *Engine {
 	SYSTEM_UUID := env.String("SYSTEM_UUID")
-	if SYSTEM_UUID == "" {
-		panic("SYSTEM_UUID is empty")
-	}
+	constant.CheckEnvSet(SYSTEM_UUID)
 
 	SYSTEM_NAME := env.String("SYSTEM_NAME")
-	if SYSTEM_NAME == "" {
-		panic("SYSTEM_NAME is empty")
-	}
+	constant.CheckEnvSet(SYSTEM_NAME)
+
 	return &Engine{
 		Gin:        gin.New(),
 		Cron:       cron.New(),
