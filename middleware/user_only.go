@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/metadiv-io/env"
 	"github.com/metadiv-io/saas/constant"
 	"github.com/metadiv-io/saas/micro"
 )
@@ -11,6 +12,11 @@ import (
 
 func UserOnly(engine *micro.Engine) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		if env.String("GIN_MODE") == gin.DebugMode {
+			ctx.Next()
+			return
+		}
+
 		if isMicro(ctx, engine) {
 			ctx.Next()
 			return
