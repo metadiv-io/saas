@@ -3,7 +3,7 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/metadiv-io/env"
-	"github.com/metadiv-io/saas/constant"
+	"github.com/metadiv-io/ginger"
 	"github.com/metadiv-io/saas/micro"
 )
 
@@ -25,13 +25,13 @@ func UserOnly(engine *micro.Engine) gin.HandlerFunc {
 		c := micro.NewContext[struct{}](engine, ctx, 0)
 		j := c.AuthJwt()
 		if j == nil {
-			c.Err(constant.ERR_CODE_UNAUTHORIZED)
+			c.Err(ginger.ERR_CODE_UNAUTHORIZED)
 			ctx.AbortWithStatusJSON(401, c.Response)
 			return
 		}
 
 		if !j.IsUser() || !j.IsIPAllowed(c.ClientIP()) || !j.IsUserAgentAllowed(c.UserAgent()) {
-			c.Err(constant.ERR_CODE_UNAUTHORIZED)
+			c.Err(ginger.ERR_CODE_UNAUTHORIZED)
 			ctx.AbortWithStatusJSON(401, c.Response)
 			return
 		}

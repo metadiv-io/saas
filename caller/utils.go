@@ -1,4 +1,4 @@
-package call
+package caller
 
 import (
 	"bytes"
@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/metadiv-io/ginger"
 	"github.com/metadiv-io/saas/constant"
 	"github.com/metadiv-io/saas/types"
 )
@@ -18,10 +19,9 @@ func get[T any](ctx *gin.Context, host string, path string,
 	if headers == nil {
 		headers = make(map[string]string)
 	}
-	headers[constant.MICRO_HEADER_TRACE_ID] = getTraceID(ctx)
-	headers[constant.MICRO_HEADER_TRACES] = getTraces(ctx)
-	headers[constant.MICRO_HEADER_WORKSPACE] = getWorkspaceUUID(ctx)
-	headers[constant.MICRO_HEADER_LOCALE] = getLocale(ctx)
+	headers[ginger.HEADER_TRACE_ID] = getTraceID(ctx)
+	headers[ginger.HEADER_TRACE] = getTraces(ctx)
+	headers[ginger.HEADER_LOCALE] = getLocale(ctx)
 	headers["Authorization"] = getAuthToken(ctx)
 
 	path += "?"
@@ -68,10 +68,9 @@ func nonGet[T any](ctx *gin.Context, host, path, method string,
 	if headers == nil {
 		headers = make(map[string]string)
 	}
-	headers[constant.MICRO_HEADER_TRACE_ID] = getTraceID(ctx)
-	headers[constant.MICRO_HEADER_TRACES] = getTraces(ctx)
-	headers[constant.MICRO_HEADER_WORKSPACE] = getWorkspaceUUID(ctx)
-	headers[constant.MICRO_HEADER_LOCALE] = getLocale(ctx)
+	headers[ginger.HEADER_TRACE_ID] = getTraceID(ctx)
+	headers[ginger.HEADER_TRACE] = getTraces(ctx)
+	headers[ginger.HEADER_LOCALE] = getLocale(ctx)
 	headers["Authorization"] = getAuthToken(ctx)
 
 	b, err := json.Marshal(body)
@@ -116,21 +115,21 @@ func getTraceID(ctx *gin.Context) string {
 	if ctx == nil {
 		return ""
 	}
-	return ctx.GetHeader(constant.MICRO_HEADER_TRACE_ID)
+	return ctx.GetHeader(ginger.HEADER_TRACE_ID)
 }
 
 func setTraceID(ctx *gin.Context, traceID string) {
 	if ctx == nil {
 		return
 	}
-	ctx.Request.Header.Set(constant.MICRO_HEADER_TRACE_ID, traceID)
+	ctx.Request.Header.Set(ginger.HEADER_TRACE_ID, traceID)
 }
 
 func getTraces(ctx *gin.Context) string {
 	if ctx == nil {
 		return ""
 	}
-	return ctx.GetHeader(constant.MICRO_HEADER_TRACES)
+	return ctx.GetHeader(ginger.HEADER_TRACE)
 }
 
 func setTraces(ctx *gin.Context, traces []types.Trace) {
@@ -138,21 +137,14 @@ func setTraces(ctx *gin.Context, traces []types.Trace) {
 		return
 	}
 	bytes, _ := json.Marshal(traces)
-	ctx.Request.Header.Set(constant.MICRO_HEADER_TRACES, string(bytes))
-}
-
-func getWorkspaceUUID(ctx *gin.Context) string {
-	if ctx == nil {
-		return ""
-	}
-	return ctx.GetHeader(constant.MICRO_HEADER_WORKSPACE)
+	ctx.Request.Header.Set(ginger.HEADER_TRACE, string(bytes))
 }
 
 func getLocale(ctx *gin.Context) string {
 	if ctx == nil {
 		return constant.LOCALE_EN
 	}
-	return ctx.GetHeader(constant.MICRO_HEADER_LOCALE)
+	return ctx.GetHeader(ginger.HEADER_LOCALE)
 }
 
 func getAuthToken(ctx *gin.Context) string {

@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/metadiv-io/logger"
-	"github.com/metadiv-io/saas/call"
+	"github.com/metadiv-io/saas/caller"
 	"github.com/metadiv-io/saas/constant"
 	"github.com/metadiv-io/saas/micro"
 	"github.com/metadiv-io/saas/types"
@@ -21,9 +21,9 @@ type RegisterResponse struct {
 
 func RegisterCron(engine *micro.Engine) func() {
 	return func() {
-		resp, err := call.POST[RegisterResponse](nil, constant.MICRO_SERVICE_HOST_AUTH, "/micro/register", &RegisterRequest{
-			SystemUUID: engine.SystemUUID,
-			SystemName: engine.SystemName,
+		resp, err := caller.POST[RegisterResponse](nil, constant.MICRO_SERVICE_HOST_AUTH, "/micro/register", &RegisterRequest{
+			SystemUUID: engine.GingerEngine.SystemUUID,
+			SystemName: engine.GingerEngine.SystemName,
 			UsageApi:   micro.UsageManager.UUIDToApi,
 		}, nil)
 		if err != nil {

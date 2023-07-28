@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/metadiv-io/logger"
-	"github.com/metadiv-io/saas/call"
+	"github.com/metadiv-io/saas/caller"
 	"github.com/metadiv-io/saas/constant"
 	"github.com/metadiv-io/saas/micro"
 	"github.com/metadiv-io/saas/types"
@@ -27,7 +27,7 @@ func SendConsumptionCron() {
 		})
 	}
 
-	resp, err := call.POST[any](nil, constant.MICRO_SERVICE_HOST_AUTH, "/micro/consumption", &SendConsumptionRequest{
+	resp, err := caller.POST[any](nil, constant.MICRO_SERVICE_HOST_AUTH, "/micro/consumption", &SendConsumptionRequest{
 		Consumption: consumptions,
 	}, nil)
 	if err != nil {

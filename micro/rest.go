@@ -2,22 +2,18 @@ package micro
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/metadiv-io/saas/constant"
+	"github.com/metadiv-io/ginger"
 )
 
 type Service[T any] func(ctx *Context[T])
 
-type Handler[T any] func() HandlerResponse[T]
-
-type HandlerResponse[T any] struct {
-	Service Service[T]
-}
+type Handler[T any] func() Service[T]
 
 func (h Handler[T]) GinHandler(engine *Engine) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		handler := h()
+		service := h()
 		c := NewContext[T](engine, ctx, h.QueryApiCredit(ctx))
-		handler.Service(c)
+		service(c)
 
 		// unexpected error
 		if !c.IsResponded || c.Response == nil {
@@ -41,13 +37,13 @@ func (h Handler[T]) GinHandler(engine *Engine) gin.HandlerFunc {
 		}
 
 		switch c.Response.Error.Code {
-		case constant.ERR_CODE_UNAUTHORIZED:
+		case ginger.ERR_CODE_UNAUTHORIZED:
 			ctx.JSON(401, c.Response)
-		case constant.ERR_CODE_FORBIDDEN, constant.ERR_CODE_NOT_ENOUGH_CREDIT:
+		case ginger.ERR_CODE_FORBIDDEN, ERR_CODE_NOT_ENOUGH_CREDIT:
 			ctx.JSON(403, c.Response)
-		case constant.ERR_CODE_WORKSPACE_NOT_FOUND:
+		case ERR_CODE_WORKSPACE_NOT_FOUND:
 			ctx.JSON(404, c.Response)
-		case constant.ERR_CODE_INTERNAL_SERVER_ERROR:
+		case ginger.ERR_CODE_INTERNAL_SERVER_ERROR:
 			ctx.JSON(500, c.Response)
 		default:
 			ctx.JSON(200, c.Response)

@@ -2,7 +2,7 @@ package micro
 
 import (
 	"github.com/metadiv-io/logger"
-	"github.com/metadiv-io/saas/call"
+	"github.com/metadiv-io/saas/caller"
 	"github.com/metadiv-io/saas/constant"
 	"github.com/metadiv-io/saas/types"
 )
@@ -57,7 +57,7 @@ type IsAllowResponse struct {
 }
 
 func (m *usageManager) AskWorkspaceAllowed(workspaceUUID, userUUID string, apiUUID string) bool {
-	resp, err := call.POST[IsAllowResponse](nil, constant.MICRO_SERVICE_HOST_AUTH, "/micro/allowed", IsAllowRequest{
+	resp, err := caller.POST[IsAllowResponse](nil, constant.MICRO_SERVICE_HOST_AUTH, "/micro/allowed", IsAllowRequest{
 		WorkspaceUUID: workspaceUUID,
 		UserUUID:      userUUID,
 		ApiUUID:       apiUUID,

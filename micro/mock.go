@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/metadiv-io/ginger"
 	"github.com/metadiv-io/sql"
 )
 
@@ -51,13 +52,15 @@ func MockContext[T any](params MockContextParams[T]) *Context[T] {
 	}
 
 	return &Context[T]{
-		GinCtx: ctx,
-		Engine: &Engine{
-			Gin: e,
+		Context: ginger.Context[T]{
+			GinCtx: ctx,
+			Engine: &ginger.Engine{
+				Gin: e,
+			},
+			Request:   params.Request,
+			Page:      params.Page,
+			Sort:      params.Sort,
+			StartTime: time.Now(),
 		},
-		Request:   params.Request,
-		Page:      params.Page,
-		Sort:      params.Sort,
-		StartTime: time.Now(),
 	}
 }

@@ -1,17 +1,13 @@
 package types
 
-import "github.com/metadiv-io/sql"
+import (
+	"github.com/metadiv-io/ginger/types"
+)
 
 type Response struct {
-	Success    bool            `json:"success"`
-	TraceID    string          `json:"trace_id"`
-	Locale     string          `json:"locale"`
-	Duration   int64           `json:"duration"`
-	Credit     float64         `json:"credit"`
-	Pagination *sql.Pagination `json:"pagination,omitempty"`
-	Error      *Error          `json:"error,omitempty"`
-	Data       interface{}     `json:"data,omitempty"`
-	Traces     []Trace         `json:"traces,omitempty"`
+	types.Response
+	Traces []Trace `json:"traces"`
+	Credit float64 `json:"credit"`
 }
 
 func (r *Response) Calculate() {
