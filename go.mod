@@ -6,7 +6,6 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
-	github.com/metadiv-io/base v1.0.5
 	github.com/metadiv-io/env v1.1.1
 	github.com/metadiv-io/ginger v1.0.2
 	github.com/metadiv-io/ginmid v1.0.1

@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/metadiv-io/base"
 	"github.com/metadiv-io/ginger"
 	gingerTypes "github.com/metadiv-io/ginger/types"
 	"github.com/metadiv-io/logger"
@@ -24,8 +23,11 @@ type Context[T any] struct {
 
 func NewContext[T any](engine *Engine, ginCtx *gin.Context, credit float64) *Context[T] {
 	gingerCtx := ginger.NewContext[T](engine.GingerEngine, ginCtx)
-	ctx := base.MapModel2Model(gingerCtx, new(Context[T]))
-	ctx.Credit = credit
+	ctx := &Context[T]{
+		Context: *gingerCtx,
+		Engine:  engine,
+		Credit:  credit,
+	}
 	return ctx
 }
 

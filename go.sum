@@ -87,8 +87,6 @@ github.com/mattn/go-sqlite3 v1.14.17 h1:mCRHCLDUBXgpKAqIKsaAaAsrAlbkeomtRFKXh2L6
 github.com/mattn/go-sqlite3 v1.14.17/go.mod h1:2eHXhiwb8IkHr+BDWZGa96P6+rkvnG63S2DGjv9HUNg=
 github.com/memcachier/mc/v3 v3.0.3 h1:qii+lDiPKi36O4Xg+HVKwHu6Oq+Gt17b+uEiA0Drwv4=
 github.com/memcachier/mc/v3 v3.0.3/go.mod h1:GzjocBahcXPxt2cmqzknrgqCOmMxiSzhVKPOe90Tpug=
-github.com/metadiv-io/base v1.0.5 h1:Ljj5sOSKnHq8uWFg65OlRxrpPnymYrT6FRYvrEy20z4=
-github.com/metadiv-io/base v1.0.5/go.mod h1:b1YBYtK2P8w6Oto+kUsu/iUfLbgKvQ8YljC5jwK7E40=
 github.com/metadiv-io/env v1.1.1 h1:TSvJwIOIrFZplHiF4wQn8dfvf7F5JPOLkncDxKBSSDY=
 github.com/metadiv-io/env v1.1.1/go.mod h1:1KtO1L/42/djY3SGZlIs0zL1tbx6YjI8bahSFk0dJRU=
 github.com/metadiv-io/ginger v1.0.2 h1:oOFil2IETXweIkSsj6amfO060idSder7WRYJy7gubAI=
