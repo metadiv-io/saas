@@ -10,7 +10,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/metadiv-io/ginger"
-	"github.com/metadiv-io/saas/constant"
 	"github.com/metadiv-io/saas/types"
 )
 
@@ -142,7 +141,7 @@ func setTraces(ctx *gin.Context, traces []types.Trace) {
 
 func getLocale(ctx *gin.Context) string {
 	if ctx == nil {
-		return constant.LOCALE_EN
+		return ginger.LOCALE_EN
 	}
 	return ctx.GetHeader(ginger.HEADER_LOCALE)
 }
