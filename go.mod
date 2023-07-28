@@ -12,7 +12,6 @@ require (
 	github.com/metadiv-io/ginmid v1.0.1
 	github.com/metadiv-io/logger v1.0.0
 	github.com/metadiv-io/sql v1.1.3
-	gorm.io/gorm v1.25.2
 )
 
 require (
@@ -58,4 +57,5 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/driver/mysql v1.5.1 // indirect
 	gorm.io/driver/sqlite v1.5.2 // indirect
+	gorm.io/gorm v1.25.2 // indirect
 )
