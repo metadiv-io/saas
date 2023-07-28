@@ -53,14 +53,16 @@ func MockContext[T any](params MockContextParams[T]) *Context[T] {
 
 	return &Context[T]{
 		Context: ginger.Context[T]{
-			GinCtx: ctx,
-			Engine: &ginger.Engine{
-				Gin: e,
-			},
+			GinCtx:    ctx,
 			Request:   params.Request,
 			Page:      params.Page,
 			Sort:      params.Sort,
 			StartTime: time.Now(),
+		},
+		Engine: &Engine{
+			GingerEngine: &ginger.Engine{
+				Gin: e,
+			},
 		},
 	}
 }
