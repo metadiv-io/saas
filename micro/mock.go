@@ -74,7 +74,7 @@ func MockContextWithAdminAuth[T any](params MockContextParams[T],
 	ctx := MockContext[T](params)
 
 	// key pairs
-	pubPEM, privPEM, err := utils.CreateRSAKeyPair()
+	privPEM, pubPEM, err := utils.CreateRSAKeyPair()
 	if err != nil {
 		panic(err)
 	}
@@ -98,7 +98,7 @@ func MockContextWithUserAuth[T any](params MockContextParams[T],
 	ctx := MockContext[T](params)
 
 	// key pairs
-	pubPEM, privPEM, err := utils.CreateRSAKeyPair()
+	privPEM, pubPEM, err := utils.CreateRSAKeyPair()
 	if err != nil {
 		panic(err)
 	}
@@ -122,7 +122,7 @@ func MockContextWithWorkspaceUserAuth[T any](params MockContextParams[T],
 	ctx := MockContext[T](params)
 
 	// key pairs
-	pubPEM, privPEM, err := utils.CreateRSAKeyPair()
+	privPEM, pubPEM, err := utils.CreateRSAKeyPair()
 	if err != nil {
 		panic(err)
 	}
