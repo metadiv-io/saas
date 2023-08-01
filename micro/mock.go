@@ -6,6 +6,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/metadiv-io/ginger"
+	"github.com/metadiv-io/saas/types"
+	"github.com/metadiv-io/saas/utils"
 	"github.com/metadiv-io/sql"
 )
 
@@ -65,4 +67,76 @@ func MockContext[T any](params MockContextParams[T]) *Context[T] {
 			},
 		},
 	}
+}
+
+func MockContextWithAdminAuth[T any](params MockContextParams[T],
+	adminUUID, adminUsername string) (*Context[T], *types.Jwt, string) {
+	ctx := MockContext[T](params)
+
+	// key pairs
+	pubPEM, privPEM, err := utils.CreateRSAKeyPair()
+	if err != nil {
+		panic(err)
+	}
+
+	// create jwt
+	j := &types.Jwt{}
+	token, err := j.IssueAdminToken(1*time.Hour, privPEM,
+		adminUUID, adminUsername, ctx.ClientIP(), ctx.UserAgent())
+	if err != nil {
+		panic(err)
+	}
+
+	// set public key
+	ctx.Engine.PubPEM = pubPEM
+
+	return ctx, j, token
+}
+
+func MockContextWithUserAuth[T any](params MockContextParams[T],
+	userUUID, userUsername string, workspaces []string) (*Context[T], *types.Jwt, string) {
+	ctx := MockContext[T](params)
+
+	// key pairs
+	pubPEM, privPEM, err := utils.CreateRSAKeyPair()
+	if err != nil {
+		panic(err)
+	}
+
+	// create jwt
+	j := &types.Jwt{}
+	token, err := j.IssueUserToken(1*time.Hour, privPEM,
+		userUUID, userUsername, ctx.ClientIP(), ctx.UserAgent(), workspaces)
+	if err != nil {
+		panic(err)
+	}
+
+	// set public key
+	ctx.Engine.PubPEM = pubPEM
+
+	return ctx, j, token
+}
+
+func MockContextWithWorkspaceUserAuth[T any](params MockContextParams[T],
+	workspaceUserUUID, workspaceUserUsername, workspaceUUID string) (*Context[T], *types.Jwt, string) {
+	ctx := MockContext[T](params)
+
+	// key pairs
+	pubPEM, privPEM, err := utils.CreateRSAKeyPair()
+	if err != nil {
+		panic(err)
+	}
+
+	// create jwt
+	j := &types.Jwt{}
+	token, err := j.IssueWorkspaceUserToken(1*time.Hour, privPEM,
+		workspaceUserUUID, workspaceUserUsername, ctx.ClientIP(), ctx.UserAgent(), workspaceUUID)
+	if err != nil {
+		panic(err)
+	}
+
+	// set public key
+	ctx.Engine.PubPEM = pubPEM
+
+	return ctx, j, token
 }
