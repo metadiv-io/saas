@@ -90,6 +90,9 @@ func MockContextWithAdminAuth[T any](params MockContextParams[T],
 	// set public key
 	ctx.Engine.PubPEM = pubPEM
 
+	// set headers
+	ctx.GinCtx.Request.Header.Set("Authorization", "Bearer "+token)
+
 	return ctx, j, token
 }
 
@@ -114,6 +117,9 @@ func MockContextWithUserAuth[T any](params MockContextParams[T],
 	// set public key
 	ctx.Engine.PubPEM = pubPEM
 
+	// set headers
+	ctx.GinCtx.Request.Header.Set("Authorization", "Bearer "+token)
+
 	return ctx, j, token
 }
 
@@ -137,6 +143,9 @@ func MockContextWithWorkspaceUserAuth[T any](params MockContextParams[T],
 
 	// set public key
 	ctx.Engine.PubPEM = pubPEM
+
+	// set headers
+	ctx.GinCtx.Request.Header.Set("Authorization", "Bearer "+token)
 
 	return ctx, j, token
 }
