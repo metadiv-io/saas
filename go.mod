@@ -7,10 +7,10 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/metadiv-io/env v1.1.1
-	github.com/metadiv-io/ginger v1.0.2
+	github.com/metadiv-io/ginger v1.0.3
 	github.com/metadiv-io/ginmid v1.0.1
 	github.com/metadiv-io/logger v1.0.0
-	github.com/metadiv-io/sql v1.1.3
+	github.com/metadiv-io/sql v1.1.4
 )
 
 require (
@@ -49,7 +49,7 @@ require (
 	github.com/ulule/limiter/v3 v3.11.1 // indirect
 	golang.org/x/arch v0.4.0 // indirect
 	golang.org/x/crypto v0.11.0 // indirect
-	golang.org/x/net v0.12.0 // indirect
+	golang.org/x/net v0.13.0 // indirect
 	golang.org/x/sys v0.10.0 // indirect
 	golang.org/x/text v0.11.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
