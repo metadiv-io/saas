@@ -15,6 +15,11 @@ func (h Handler[T]) GinHandler(engine *Engine) gin.HandlerFunc {
 		c := NewContext[T](engine, ctx, h.QueryApiCredit(ctx))
 		service(c)
 
+		// if file is served, no need to respond
+		if c.IsResponded && c.IsFile {
+			return
+		}
+
 		// unexpected error
 		if !c.IsResponded || c.Response == nil {
 			ctx.JSON(500, gin.H{
