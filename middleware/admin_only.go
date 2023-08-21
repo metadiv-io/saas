@@ -1,6 +1,8 @@
 package middleware
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 	"github.com/metadiv-io/env"
 	"github.com/metadiv-io/ginger"
@@ -25,12 +27,28 @@ func AdminOnly(engine *micro.Engine) gin.HandlerFunc {
 		c := micro.NewContext[struct{}](engine, ctx, 0)
 		j := c.AuthJwt()
 		if j == nil {
+			log.Println("jwt is nil")
 			c.Err(ginger.ERR_CODE_UNAUTHORIZED)
 			ctx.AbortWithStatusJSON(401, c.Response)
 			return
 		}
 
-		if !j.IsAdmin() || !j.IsIPAllowed(c.ClientIP()) || !j.IsUserAgentAllowed(c.UserAgent()) {
+		if !j.IsAdmin() {
+			log.Println("user is not admin role")
+			c.Err(ginger.ERR_CODE_UNAUTHORIZED)
+			ctx.AbortWithStatusJSON(401, c.Response)
+			return
+		}
+
+		if !j.IsIPAllowed(c.ClientIP()) {
+			log.Panicln("ip is not allowed")
+			c.Err(ginger.ERR_CODE_UNAUTHORIZED)
+			ctx.AbortWithStatusJSON(401, c.Response)
+			return
+		}
+
+		if !j.IsUserAgentAllowed(c.UserAgent()) {
+			log.Panicln("user agent is not allowed")
 			c.Err(ginger.ERR_CODE_UNAUTHORIZED)
 			ctx.AbortWithStatusJSON(401, c.Response)
 			return

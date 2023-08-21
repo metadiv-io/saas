@@ -1,6 +1,8 @@
 package middleware
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 	"github.com/metadiv-io/env"
 	"github.com/metadiv-io/ginger"
@@ -25,24 +27,42 @@ func WorkspaceUserOnly(engine *micro.Engine) gin.HandlerFunc {
 		c := micro.NewContext[struct{}](engine, ctx, 0)
 		j := c.AuthJwt()
 		if j == nil {
+			log.Println("jwt is nil")
 			c.Err(ginger.ERR_CODE_UNAUTHORIZED)
 			ctx.AbortWithStatusJSON(401, c.Response)
 			return
 		}
 
-		if (!j.IsWorkspaceUser() && !j.IsAPIKey()) || !j.IsIPAllowed(c.ClientIP()) || !j.IsUserAgentAllowed(c.UserAgent()) {
+		if !j.IsWorkspaceUser() && !j.IsAPIKey() {
+			log.Println("user is not workspace user or api key")
+			c.Err(ginger.ERR_CODE_UNAUTHORIZED)
+			ctx.AbortWithStatusJSON(401, c.Response)
+			return
+		}
+
+		if !j.IsIPAllowed(c.ClientIP()) {
+			log.Panicln("ip is not allowed")
+			c.Err(ginger.ERR_CODE_UNAUTHORIZED)
+			ctx.AbortWithStatusJSON(401, c.Response)
+			return
+		}
+
+		if !j.IsUserAgentAllowed(c.UserAgent()) {
+			log.Panicln("user agent is not allowed")
 			c.Err(ginger.ERR_CODE_UNAUTHORIZED)
 			ctx.AbortWithStatusJSON(401, c.Response)
 			return
 		}
 
 		if c.Workspace() == "" {
+			log.Panicln("workspace is empty")
 			c.Err(micro.ERR_CODE_WORKSPACE_NOT_FOUND)
 			ctx.AbortWithStatusJSON(404, c.Response)
 			return
 		}
 
 		if !micro.UsageManager.AskWorkspaceAllowed(c.Workspace(), j.UserUUID, micro.UsageManager.TagToApi[c.ApiTag()].UUID) {
+			log.Panicln("workspace is not allowed (usage)")
 			c.Err(micro.ERR_CODE_NOT_ENOUGH_CREDIT)
 			ctx.AbortWithStatusJSON(403, c.Response)
 			return
