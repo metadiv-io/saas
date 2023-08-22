@@ -41,28 +41,28 @@ func WorkspaceUserOnly(engine *micro.Engine) gin.HandlerFunc {
 		}
 
 		if !j.IsIPAllowed(c.ClientIP()) {
-			log.Panicln("ip is not allowed")
+			log.Println("ip is not allowed")
 			c.Err(ginger.ERR_CODE_UNAUTHORIZED)
 			ctx.AbortWithStatusJSON(401, c.Response)
 			return
 		}
 
 		if !j.IsUserAgentAllowed(c.UserAgent()) {
-			log.Panicln("user agent is not allowed")
+			log.Println("user agent is not allowed")
 			c.Err(ginger.ERR_CODE_UNAUTHORIZED)
 			ctx.AbortWithStatusJSON(401, c.Response)
 			return
 		}
 
 		if c.Workspace() == "" {
-			log.Panicln("workspace is empty")
+			log.Println("workspace is empty")
 			c.Err(micro.ERR_CODE_WORKSPACE_NOT_FOUND)
 			ctx.AbortWithStatusJSON(404, c.Response)
 			return
 		}
 
 		if !micro.UsageManager.AskWorkspaceAllowed(c.Workspace(), j.UserUUID, micro.UsageManager.TagToApi[c.ApiTag()].UUID) {
-			log.Panicln("workspace is not allowed (usage)")
+			log.Println("workspace is not allowed (usage)")
 			c.Err(micro.ERR_CODE_NOT_ENOUGH_CREDIT)
 			ctx.AbortWithStatusJSON(403, c.Response)
 			return

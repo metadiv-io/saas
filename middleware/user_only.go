@@ -41,14 +41,14 @@ func UserOnly(engine *micro.Engine) gin.HandlerFunc {
 		}
 
 		if !j.IsIPAllowed(c.ClientIP()) {
-			log.Panicln("ip is not allowed")
+			log.Println("ip is not allowed")
 			c.Err(ginger.ERR_CODE_UNAUTHORIZED)
 			ctx.AbortWithStatusJSON(401, c.Response)
 			return
 		}
 
 		if !j.IsUserAgentAllowed(c.UserAgent()) {
-			log.Panicln("user agent is not allowed")
+			log.Println("user agent is not allowed")
 			c.Err(ginger.ERR_CODE_UNAUTHORIZED)
 			ctx.AbortWithStatusJSON(401, c.Response)
 			return
