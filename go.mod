@@ -6,11 +6,13 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
+	github.com/metadiv-io/base v1.0.9
 	github.com/metadiv-io/env v1.1.1
 	github.com/metadiv-io/ginger v1.0.4
 	github.com/metadiv-io/ginmid v1.0.1
 	github.com/metadiv-io/logger v1.0.0
-	github.com/metadiv-io/sql v1.1.4
+	github.com/metadiv-io/sql v1.1.14
+	gorm.io/gorm v1.25.3
 )
 
 require (
@@ -56,5 +58,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/driver/mysql v1.5.1 // indirect
 	gorm.io/driver/sqlite v1.5.2 // indirect
-	gorm.io/gorm v1.25.2 // indirect
 )
