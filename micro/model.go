@@ -1,6 +1,8 @@
 package micro
 
 import (
+	"time"
+
 	"github.com/metadiv-io/base"
 	"github.com/metadiv-io/ginger"
 	"github.com/metadiv-io/sql"
@@ -71,8 +73,15 @@ func (r *BaseWorkspaceRepository[T]) DeleteBy(tx *gorm.DB, workspace string, cla
 	))
 }
 
+type Model struct {
+	ID        uint           `gorm:"primarykey" json:"id"`
+	CreatedAt time.Time      `json:"created_at"`
+	UpdatedAt time.Time      `json:"updated_at"`
+	DeletedAt gorm.DeletedAt `gorm:"index" json:"deleted_at,omitempty"`
+}
+
 type BaseWorkspaceModel struct {
-	gorm.Model
+	Model
 	Workspace string `gorm:"not null;"`
 	UUID      string `gorm:"not null;"`
 }
