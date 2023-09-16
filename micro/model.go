@@ -82,8 +82,8 @@ type Model struct {
 
 type BaseWorkspaceModel struct {
 	Model
-	Workspace string `gorm:"not null;"`
-	UUID      string `gorm:"not null;"`
+	Workspace string `gorm:"not null;" json:"workspace"`
+	UUID      string `gorm:"not null;" json:"uuid"`
 }
 
 func (m *BaseWorkspaceModel) SetWorkspace(workspace string) {
