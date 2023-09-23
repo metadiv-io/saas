@@ -91,8 +91,8 @@ github.com/metadiv-io/base v1.0.9 h1:UNFsOfxmCvrB9ToDByIRaNGOwr+6Wsb+Ut8UHKFkUzA
 github.com/metadiv-io/base v1.0.9/go.mod h1:JoIYGZ3lcNfE32k8YB0v6q59neALKWOD1glA28eQFpc=
 github.com/metadiv-io/env v1.1.1 h1:TSvJwIOIrFZplHiF4wQn8dfvf7F5JPOLkncDxKBSSDY=
 github.com/metadiv-io/env v1.1.1/go.mod h1:1KtO1L/42/djY3SGZlIs0zL1tbx6YjI8bahSFk0dJRU=
-github.com/metadiv-io/ginger v1.0.7 h1:9dVwr7K7svzeutAurK2zvkN+AWgwz0rJYLdUte3n5bo=
-github.com/metadiv-io/ginger v1.0.7/go.mod h1:DJbw4wzPM19w+4lDoVgzVF8cHdquQfxTZC7sO7adh54=
+github.com/metadiv-io/ginger v1.0.8 h1:sn/tBxkLxnQanPIUwp3OJpSOdMEtbU4F4NmJPKN9wks=
+github.com/metadiv-io/ginger v1.0.8/go.mod h1:DJbw4wzPM19w+4lDoVgzVF8cHdquQfxTZC7sO7adh54=
 github.com/metadiv-io/ginmid v1.0.1 h1:VgAs/N3kWhLiKhHVxWLJwP9TAIebO11reZAigm9QHag=
 github.com/metadiv-io/ginmid v1.0.1/go.mod h1:PER0kTbBU8BPHuEa7Ca2cRAtfgqWojEjFCepWgPKS6I=
 github.com/metadiv-io/logger v1.0.0 h1:yp3Ox7gXxltQLMcsvFv+Vmrzxgo6OYIzn49C1p9Bdtk=
