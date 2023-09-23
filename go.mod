@@ -8,7 +8,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/metadiv-io/base v1.0.9
 	github.com/metadiv-io/env v1.1.1
-	github.com/metadiv-io/ginger v1.0.5
+	github.com/metadiv-io/ginger v1.0.6
 	github.com/metadiv-io/ginmid v1.0.1
 	github.com/metadiv-io/logger v1.0.0
 	github.com/metadiv-io/sql v1.1.14
