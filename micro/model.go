@@ -22,10 +22,12 @@ func (r *BaseWorkspaceRepository[T]) FindOne(tx *gorm.DB, workspace string, clau
 	if len(tableName) > 0 {
 		fieldName = tableName[0] + ".workspace"
 	}
-	return sql.FindOne[T](tx, sql.And(
-		sql.Eq(fieldName, workspace),
-		clause,
-	))
+	cls := make([]*sql.Clause, 0)
+	cls = append(cls, sql.Eq(fieldName, workspace))
+	if clause != nil {
+		cls = append(cls, clause)
+	}
+	return sql.FindOne[T](tx, sql.And(cls...))
 }
 
 func (r *BaseWorkspaceRepository[T]) FindAll(tx *gorm.DB, workspace string, clause *sql.Clause, tableName ...string) ([]T, error) {
@@ -33,10 +35,12 @@ func (r *BaseWorkspaceRepository[T]) FindAll(tx *gorm.DB, workspace string, clau
 	if len(tableName) > 0 {
 		fieldName = tableName[0] + ".workspace"
 	}
-	return sql.FindAll[T](tx, sql.And(
-		sql.Eq(fieldName, workspace),
-		clause,
-	))
+	cls := make([]*sql.Clause, 0)
+	cls = append(cls, sql.Eq(fieldName, workspace))
+	if clause != nil {
+		cls = append(cls, clause)
+	}
+	return sql.FindAll[T](tx, sql.And(cls...))
 }
 
 func (r *BaseWorkspaceRepository[T]) Count(tx *gorm.DB, workspace string, clause *sql.Clause, tableName ...string) (int64, error) {
@@ -44,10 +48,12 @@ func (r *BaseWorkspaceRepository[T]) Count(tx *gorm.DB, workspace string, clause
 	if len(tableName) > 0 {
 		fieldName = tableName[0] + ".workspace"
 	}
-	return sql.Count[T](tx, sql.And(
-		sql.Eq(fieldName, workspace),
-		clause,
-	))
+	cls := make([]*sql.Clause, 0)
+	cls = append(cls, sql.Eq(fieldName, workspace))
+	if clause != nil {
+		cls = append(cls, clause)
+	}
+	return sql.Count[T](tx, sql.And(cls...))
 }
 
 func (r *BaseWorkspaceRepository[T]) FindAllComplex(
@@ -56,10 +62,12 @@ func (r *BaseWorkspaceRepository[T]) FindAllComplex(
 	if len(tableName) > 0 {
 		fieldName = tableName[0] + ".workspace"
 	}
-	return sql.FindAllComplex[T](tx, sql.And(
-		sql.Eq(fieldName, workspace),
-		clause,
-	), sort, page)
+	cls := make([]*sql.Clause, 0)
+	cls = append(cls, sql.Eq(fieldName, workspace))
+	if clause != nil {
+		cls = append(cls, clause)
+	}
+	return sql.FindAllComplex[T](tx, sql.And(cls...), sort, page)
 }
 
 func (r *BaseWorkspaceRepository[T]) DeleteBy(tx *gorm.DB, workspace string, clause *sql.Clause, tableName ...string) error {
@@ -67,10 +75,12 @@ func (r *BaseWorkspaceRepository[T]) DeleteBy(tx *gorm.DB, workspace string, cla
 	if len(tableName) > 0 {
 		fieldName = tableName[0] + ".workspace"
 	}
-	return sql.DeleteAllByClause[T](tx, sql.And(
-		sql.Eq(fieldName, workspace),
-		clause,
-	))
+	cls := make([]*sql.Clause, 0)
+	cls = append(cls, sql.Eq(fieldName, workspace))
+	if clause != nil {
+		cls = append(cls, clause)
+	}
+	return sql.DeleteAllByClause[T](tx, sql.And(cls...))
 }
 
 type Model struct {
