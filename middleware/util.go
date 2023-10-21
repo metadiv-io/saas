@@ -5,9 +5,9 @@ import (
 	"github.com/metadiv-io/saas/micro"
 )
 
-func isMicro(ctx *gin.Context, engine *micro.Engine) bool {
+func isMicro(ctx *gin.Context, engine micro.IEngine) bool {
 	ip := ctx.ClientIP()
-	for _, v := range engine.MicroIPs {
+	for _, v := range engine.MicroIPs() {
 		if v == ip {
 			return true
 		}

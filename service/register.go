@@ -19,11 +19,11 @@ type RegisterResponse struct {
 	UsageApi  map[string]*types.Api `json:"usage_api"`
 }
 
-func RegisterCron(engine *micro.Engine) func() {
+func RegisterCron(engine micro.IEngine) func() {
 	return func() {
 		resp, err := caller.POST[RegisterResponse](nil, constant.MICRO_SERVICE_HOST_AUTH, "/micro/register", &RegisterRequest{
-			SystemUUID: engine.GingerEngine.SystemUUID,
-			SystemName: engine.GingerEngine.SystemName,
+			SystemUUID: engine.SystemUUID(),
+			SystemName: engine.SystemName(),
 			UsageApi:   micro.UsageManager.UUIDToApi,
 		}, nil)
 		if err != nil {
@@ -34,7 +34,7 @@ func RegisterCron(engine *micro.Engine) func() {
 			logger.Error("Fail to register service:", resp.Error.Message)
 			return
 		}
-		engine.PubPEM = resp.Data.PublicPEM
+		engine.SetPubPEM(resp.Data.PublicPEM)
 		micro.UsageManager.UUIDToApi = resp.Data.UsageApi
 		for _, api := range micro.UsageManager.UUIDToApi {
 			micro.UsageManager.TagToApi[api.Tag()] = api

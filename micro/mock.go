@@ -5,9 +5,10 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/metadiv-io/ginger"
+	"github.com/metadiv-io/ginger/context"
+	"github.com/metadiv-io/ginger/engine"
+	"github.com/metadiv-io/saas/internal/util"
 	"github.com/metadiv-io/saas/types"
-	"github.com/metadiv-io/saas/utils"
 	"github.com/metadiv-io/sql"
 )
 
@@ -22,7 +23,7 @@ type MockContextParams[T any] struct {
 	Headers   map[string]string
 }
 
-func MockContext[T any](params MockContextParams[T]) *Context[T] {
+func MockContext[T any](params MockContextParams[T]) IContext[T] {
 	w := httptest.NewRecorder()
 	ctx, e := gin.CreateTestContext(w)
 
@@ -54,27 +55,26 @@ func MockContext[T any](params MockContextParams[T]) *Context[T] {
 	}
 
 	return &Context[T]{
-		Context: ginger.Context[T]{
-			GinCtx:    ctx,
-			Request:   params.Request,
-			Page:      params.Page,
-			Sort:      params.Sort,
-			StartTime: time.Now(),
-		},
-		Engine: &Engine{
-			GingerEngine: &ginger.Engine{
-				Gin: e,
-			},
-		},
+		IContext: context.NewContext[T](
+			engine.NewMockEngine(e),
+			ctx,
+			params.Page,
+			params.Sort,
+			params.Request,
+			nil,
+			time.Now(),
+			false,
+			false,
+		),
 	}
 }
 
 func MockContextWithAdminAuth[T any](params MockContextParams[T],
-	adminUUID, adminUsername string) (*Context[T], *types.Jwt, string) {
+	adminUUID, adminUsername string) (IContext[T], *types.Jwt, string) {
 	ctx := MockContext[T](params)
 
 	// key pairs
-	privPEM, pubPEM, err := utils.CreateRSAKeyPair()
+	privPEM, pubPEM, err := util.CreateRSAKeyPair()
 	if err != nil {
 		panic(err)
 	}
@@ -88,20 +88,20 @@ func MockContextWithAdminAuth[T any](params MockContextParams[T],
 	}
 
 	// set public key
-	ctx.Engine.PubPEM = pubPEM
+	ctx.Engine().SetPubPEM(pubPEM)
 
 	// set headers
-	ctx.GinCtx.Request.Header.Set("Authorization", "Bearer "+token)
+	ctx.GinCtx().Request.Header.Set("Authorization", "Bearer "+token)
 
 	return ctx, j, token
 }
 
 func MockContextWithUserAuth[T any](params MockContextParams[T],
-	userUUID, userUsername string, workspaces []string) (*Context[T], *types.Jwt, string) {
+	userUUID, userUsername string, workspaces []string) (IContext[T], *types.Jwt, string) {
 	ctx := MockContext[T](params)
 
 	// key pairs
-	privPEM, pubPEM, err := utils.CreateRSAKeyPair()
+	privPEM, pubPEM, err := util.CreateRSAKeyPair()
 	if err != nil {
 		panic(err)
 	}
@@ -115,20 +115,20 @@ func MockContextWithUserAuth[T any](params MockContextParams[T],
 	}
 
 	// set public key
-	ctx.Engine.PubPEM = pubPEM
+	ctx.Engine().SetPubPEM(pubPEM)
 
 	// set headers
-	ctx.GinCtx.Request.Header.Set("Authorization", "Bearer "+token)
+	ctx.GinCtx().Request.Header.Set("Authorization", "Bearer "+token)
 
 	return ctx, j, token
 }
 
 func MockContextWithWorkspaceUserAuth[T any](params MockContextParams[T],
-	workspaceUserUUID, workspaceUserUsername, workspaceUUID string) (*Context[T], *types.Jwt, string) {
+	workspaceUserUUID, workspaceUserUsername, workspaceUUID string) (IContext[T], *types.Jwt, string) {
 	ctx := MockContext[T](params)
 
 	// key pairs
-	privPEM, pubPEM, err := utils.CreateRSAKeyPair()
+	privPEM, pubPEM, err := util.CreateRSAKeyPair()
 	if err != nil {
 		panic(err)
 	}
@@ -142,10 +142,10 @@ func MockContextWithWorkspaceUserAuth[T any](params MockContextParams[T],
 	}
 
 	// set public key
-	ctx.Engine.PubPEM = pubPEM
+	ctx.Engine().SetPubPEM(pubPEM)
 
 	// set headers
-	ctx.GinCtx.Request.Header.Set("Authorization", "Bearer "+token)
+	ctx.GinCtx().Request.Header.Set("Authorization", "Bearer "+token)
 
 	return ctx, j, token
 }

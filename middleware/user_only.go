@@ -12,7 +12,7 @@ import (
 // User apis are only accessible by users.
 // Admin users, workspace users and api keys are not allowed to access these apis.
 
-func UserOnly(engine *micro.Engine) gin.HandlerFunc {
+func UserOnly(engine micro.IEngine) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		if env.String("GIN_MODE") == gin.DebugMode {
 			ctx.Next()

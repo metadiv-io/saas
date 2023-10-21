@@ -11,7 +11,7 @@ type MicroIpResponse struct {
 	Ips []string `json:"ips"`
 }
 
-func GetMicroIpCron(engine *micro.Engine) func() {
+func GetMicroIpCron(engine micro.IEngine) func() {
 	return func() {
 		resp, err := caller.GET[MicroIpResponse](nil, constant.MICRO_SERVICE_HOST_AUTH, "/micro/ips", nil, nil)
 		if err != nil {
@@ -22,6 +22,6 @@ func GetMicroIpCron(engine *micro.Engine) func() {
 			logger.Error("get micro ips failed: ", resp.Error.Message)
 			return
 		}
-		engine.MicroIPs = resp.Data.Ips
+		engine.SetMicroIPs(resp.Data.Ips)
 	}
 }

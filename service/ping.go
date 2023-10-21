@@ -12,14 +12,14 @@ type Pong struct {
 }
 
 func PingHandler() micro.Service[struct{}] {
-	return func(ctx *micro.Context[struct{}]) {
+	return func(ctx micro.IContext[struct{}]) {
 		apis := make([]types.Api, 0)
 		for _, api := range micro.UsageManager.UUIDToApi {
 			apis = append(apis, *api)
 		}
 		ctx.OK(&Pong{
-			SystemUUID: ctx.Engine.GingerEngine.SystemUUID,
-			SystemName: ctx.Engine.GingerEngine.SystemName,
+			SystemUUID: ctx.Engine().SystemUUID(),
+			SystemName: ctx.Engine().SystemName(),
 			Apis:       apis,
 		})
 	}
